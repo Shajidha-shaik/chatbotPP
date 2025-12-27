@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Education Guidance Chatbot</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI',sans-serif;
+}
+
+body{
+  height:100vh;
+  background:linear-gradient(135deg,#667eea,#764ba2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+/* ---------- WELCOME PAGE ---------- */
+#welcome{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  color:white;
+  text-align:center;
+  animation:fadeIn 1.2s ease;
+}
+
+#welcome h1{
+  font-size:52px;
+  margin-bottom:20px;
+}
+
+#welcome p{
+  font-size:22px;
+  max-width:600px;
+  margin-bottom:40px;
+  opacity:0.9;
+}
+
+#welcome button{
+  padding:16px 45px;
+  font-size:20px;
+  border:none;
+  border-radius:40px;
+  background:white;
+  color:#5a67d8;
+  cursor:pointer;
+  animation:pulse 2s infinite;
+}
+
+#welcome button:hover{
+  transform:scale(1.1);
+}
+
+/* ---------- CHATBOT ---------- */
+#chatbot{
+  display:none;
+  width:420px;
+  height:600px;
+  background:white;
+  border-radius:20px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.3);
+  overflow:hidden;
+  flex-direction:column;
+}
+
+.header{
+  background:#5a67d8;
+  color:white;
+  padding:18px;
+  text-align:center;
+  font-size:20px;
+  font-weight:600;
+}
+
+.chat{
+  flex:1;
+  padding:16px;
+  background:#f6f7fb;
+  overflow-y:auto;
+}
+
+/* ---------- MESSAGES ---------- */
+.bot{
+  background:#e2e8f0;
+  padding:14px;
+  margin-bottom:14px;
+  border-radius:16px 16px 16px 0;
+  animation:slideLeft 0.4s ease;
+}
+
+.user{
+  background:#5a67d8;
+  color:white;
+  padding:14px;
+  margin-bottom:14px;
+  border-radius:16px 16px 0 16px;
+  margin-left:auto;
+  animation:slideRight 0.4s ease;
+}
+
+/* ---------- OPTIONS ---------- */
+.options{
+  margin-top:12px;
+  display:flex;
+  flex-wrap:wrap;
+}
+
+.options button{
+  margin:6px;
+  padding:9px 18px;
+  border:none;
+  border-radius:25px;
+  background:#5a67d8;
+  color:white;
+  cursor:pointer;
+  animation:pop 0.3s ease;
+}
+
+.options button:hover{
+  background:#434190;
+  transform:scale(1.05);
+}
+
+/* ---------- ANIMATIONS ---------- */
+@keyframes fadeIn{
+  from{opacity:0;}
+  to{opacity:1;}
+}
+
+@keyframes slideLeft{
+  from{opacity:0; transform:translateX(-30px);}
+  to{opacity:1; transform:translateX(0);}
+}
+
+@keyframes slideRight{
+  from{opacity:0; transform:translateX(30px);}
+  to{opacity:1; transform:translateX(0);}
+}
+
+@keyframes pop{
+  from{opacity:0; transform:scale(0.7);}
+  to{opacity:1; transform:scale(1);}
+}
+
+@keyframes pulse{
+  0%{transform:scale(1);}
+  50%{transform:scale(1.08);}
+  100%{transform:scale(1);}
+}
+</style>
+</head>
+
+<body>
+
+<!-- WELCOME PAGE -->
+<div id="welcome">
+  <h1>Education Guidance Chatbot</h1>
+  <p>
+    Choosing the right education and career path is one of the most important
+    decisions of your life. I am here to guide you step by step.
+  </p>
+  <button onclick="startChat()">Get Started</button>
+</div>
+
+<!-- CHATBOT -->
+<div id="chatbot">
+  <div class="header">🎓 Education Guide</div>
+  <div class="chat" id="chat"></div>
+</div>
+
+<script>
+const chat=document.getElementById("chat");
+
+function startChat(){
+  document.getElementById("welcome").style.display="none";
+  document.getElementById("chatbot").style.display="flex";
+  intro();
+}
+
+function intro(){
+  bot(
+    "Hello 👋 I am your personal education counselor.<br><br>Tell me your current education level:",
+    ["After 10th","After 12th","After Degree"]
+  );
+}
+
+function bot(text, options=[]){
+  const d=document.createElement("div");
+  d.className="bot";
+  let html=`<p>${text}</p>`;
+  if(options.length){
+    html+=`<div class="options">`;
+    options.forEach(o=>{
+      html+=`<button onclick="handle('${o}')">${o}</button>`;
+    });
+    html+=`</div>`;
+  }
+  d.innerHTML=html;
+  chat.appendChild(d);
+  chat.scrollTop=chat.scrollHeight;
+}
+
+function user(text){
+  const d=document.createElement("div");
+  d.className="user";
+  d.innerText=text;
+  chat.appendChild(d);
+}
+
+/* MAIN LOGIC */
+function handle(choice){
+  user(choice);
+
+  if(choice==="After 10th"){
+    bot(
+      "After 10th is the foundation stage. The right education now builds a strong future.",
+      ["Intermediate","Diploma","IIT Foundation","Restart"]
+    );
+  }
+
+  else if(choice==="After 12th"){
+    bot(
+      "After 12th, you can either continue higher education or prepare for careers.",
+      ["Higher Education","Career Opportunities","Restart"]
+    );
+  }
+
+  else if(choice==="Higher Education"){
+    bot(
+      "Higher education options after 12th:",
+      ["B.Tech","Degree","IIT","Restart"]
+    );
+  }
+
+  else if(choice==="Career Opportunities"){
+    bot(
+      "Career opportunities after 12th:",
+      ["Government Jobs","Apprenticeships","Restart"]
+    );
+  }
+
+  else if(choice==="After Degree"){
+    bot(
+      "After graduation, specialization or industry exposure is important.",
+      ["Higher Studies","Jobs","Restart"]
+    );
+  }
+
+  else if(choice==="Higher Studies"){
+    bot(
+      "Recommended higher studies:",
+      ["MCA","MBA","M.Tech / MS","Restart"]
+    );
+  }
+
+  else if(choice==="Jobs"){
+    bot(
+      "Job opportunities after degree:",
+      ["Software Industry","Core / Govt / Private Jobs","Restart"]
+    );
+  }
+
+  else if(choice==="Restart"){
+    chat.innerHTML="";
+    intro();
+  }
+}
+</script>
+
+</body>
+</html>
